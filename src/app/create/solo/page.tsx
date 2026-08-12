@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { toPng } from "html-to-image";
 import IDCard from "@/components/IDCard";
 import TiltCard from "@/components/TiltCard";
-import { slugify } from "@/lib/card";
+import { loadPhotoAsDataUrl, slugify } from "@/lib/card";
 
 export default function SoloGenerator() {
   const [name, setName] = useState("");
@@ -14,12 +14,17 @@ export default function SoloGenerator() {
   const [isExporting, setIsExporting] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  function handlePhoto(e: React.ChangeEvent<HTMLInputElement>) {
+  const [isPhotoLoading, setIsPhotoLoading] = useState(false);
+
+  async function handlePhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => setPhotoUrl(reader.result as string);
-    reader.readAsDataURL(file);
+    setIsPhotoLoading(true);
+    try {
+      setPhotoUrl(await loadPhotoAsDataUrl(file));
+    } finally {
+      setIsPhotoLoading(false);
+    }
   }
 
   async function handleDownload() {
@@ -65,13 +70,15 @@ export default function SoloGenerator() {
           <div className="flex items-center gap-3 rounded-lg border border-dashed border-hh-yellow/60 p-3">
             <input
               type="file"
-              accept="image/*"
+              accept="image/*,.heic,.heif"
               onChange={handlePhoto}
               className="w-full text-xs font-normal normal-case text-hh-cream file:mr-3 file:rounded file:border-0 file:bg-hh-yellow file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-hh-green-950"
             />
           </div>
           <span className="text-[10px] font-normal normal-case text-hh-cream/50">
-            Any photo works — auto-cropped to a circle, no manual cropping needed.
+            {isPhotoLoading
+              ? "Converting photo…"
+              : "Any photo works, including iPhone HEIC — auto-cropped to a circle, no manual cropping needed."}
           </span>
         </label>
 

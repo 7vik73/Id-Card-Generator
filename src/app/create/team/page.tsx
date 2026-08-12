@@ -5,7 +5,7 @@ import { toBlob, toPng } from "html-to-image";
 import JSZip from "jszip";
 import IDCard, { type IDCardData } from "@/components/IDCard";
 import TiltCard from "@/components/TiltCard";
-import { slugify } from "@/lib/card";
+import { loadPhotoAsDataUrl, slugify } from "@/lib/card";
 
 const MAX_MEMBERS = 3;
 const MIN_MEMBERS = 1;
@@ -23,18 +23,22 @@ export default function TeamGenerator() {
   const [teamName, setTeamName] = useState("");
   const [members, setMembers] = useState<IDCardData[]>([emptyMember()]);
   const [isExporting, setIsExporting] = useState(false);
+  const [loadingPhotoIndex, setLoadingPhotoIndex] = useState<number | null>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   function updateMember(index: number, patch: Partial<IDCardData>) {
     setMembers((prev) => prev.map((m, i) => (i === index ? { ...m, ...patch } : m)));
   }
 
-  function handlePhoto(index: number, e: React.ChangeEvent<HTMLInputElement>) {
+  async function handlePhoto(index: number, e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => updateMember(index, { photoUrl: reader.result as string });
-    reader.readAsDataURL(file);
+    setLoadingPhotoIndex(index);
+    try {
+      updateMember(index, { photoUrl: await loadPhotoAsDataUrl(file) });
+    } finally {
+      setLoadingPhotoIndex(null);
+    }
   }
 
   function addMember() {
@@ -126,11 +130,16 @@ export default function TeamGenerator() {
                 <div className="flex items-center gap-3 rounded-lg border border-dashed border-hh-yellow/60 p-2">
                   <input
                     type="file"
-                    accept="image/*"
+                    accept="image/*,.heic,.heif"
                     onChange={(e) => handlePhoto(index, e)}
                     className="w-full text-xs font-normal normal-case text-hh-cream file:mr-3 file:rounded file:border-0 file:bg-hh-yellow file:px-3 file:py-1.5 file:text-xs file:font-bold file:text-hh-green-950"
                   />
                 </div>
+                {loadingPhotoIndex === index && (
+                  <span className="text-[10px] font-normal normal-case text-hh-cream/50">
+                    Converting photo…
+                  </span>
+                )}
               </label>
 
               <label className="flex flex-col gap-2 text-xs font-bold uppercase tracking-wide text-hh-yellow">

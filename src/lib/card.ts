@@ -25,3 +25,34 @@ export function formatTechStack(techStack: string): string {
     .filter(Boolean)
     .join(" · ");
 }
+
+function isHeic(file: File): boolean {
+  return (
+    file.type === "image/heic" ||
+    file.type === "image/heif" ||
+    /\.hei[cf]$/i.test(file.name)
+  );
+}
+
+function readAsDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
+}
+
+/**
+ * Browsers can't decode HEIC/HEIF (the default format iPhone photos are
+ * saved in), so an uploaded HEIC file silently fails to render as an <img>.
+ * Convert it to JPEG client-side first; everything else passes through.
+ */
+export async function loadPhotoAsDataUrl(file: File): Promise<string> {
+  if (!isHeic(file)) return readAsDataUrl(file);
+
+  const heic2any = (await import("heic2any")).default;
+  const converted = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.9 });
+  const blob = Array.isArray(converted) ? converted[0] : converted;
+  return readAsDataUrl(blob);
+}
