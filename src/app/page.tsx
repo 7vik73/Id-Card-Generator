@@ -65,12 +65,17 @@ export default function Landing() {
         <img src="/scooter.png" alt="Scooter" className="h-16 w-auto sm:h-20" />
       </div>
 
-      <div className="absolute bottom-10 right-8 -rotate-6 border-2 border-hh-pink px-4 py-2 text-center font-mono text-xs font-bold uppercase tracking-wide text-hh-pink sm:right-16">
+      <a
+        href="https://hhgoa.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="absolute bottom-10 right-8 -rotate-6 border-2 border-hh-pink px-4 py-2 text-center font-mono text-xs font-bold uppercase tracking-wide text-hh-pink transition hover:bg-hh-pink/10 sm:right-16"
+      >
         Check
         <br />
         Hype
         <span className="absolute -top-3 -right-3 text-hh-yellow">✦</span>
-      </div>
+      </a>
     </main>
   );
 }
