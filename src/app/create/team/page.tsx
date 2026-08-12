@@ -59,6 +59,14 @@ export default function TeamGenerator() {
     link.click();
   }
 
+  async function shareCard(index: number) {
+    await downloadCard(index);
+    const text = `Shipping from Hyderabad 🌴⚡\n\nI'm officially framed for HH Goa 2026.\n\nCheck out my Builder ID Card 👇\n#FrameInGoa`;
+    const url = typeof window !== "undefined" ? window.location.origin : "https://hhgoa.com";
+    const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+    window.open(intent, "_blank", "noopener,noreferrer");
+  }
+
   async function handleDownloadAll() {
     setIsExporting(true);
     try {
@@ -185,13 +193,22 @@ export default function TeamGenerator() {
               />
             </TiltCard>
 
-            <button
-              onClick={() => downloadCard(index)}
-              disabled={isExporting}
-              className="w-full max-w-[420px] rounded-lg border-2 border-hh-yellow px-4 py-2.5 text-sm font-bold uppercase tracking-wide text-hh-yellow transition hover:bg-hh-yellow/10 disabled:opacity-60"
-            >
-              Download This Card
-            </button>
+            <div className="flex w-full max-w-[420px] gap-3">
+              <button
+                onClick={() => downloadCard(index)}
+                disabled={isExporting}
+                className="flex-1 rounded-lg border-2 border-hh-yellow px-4 py-2.5 text-sm font-bold uppercase tracking-wide text-hh-yellow transition hover:bg-hh-yellow/10 disabled:opacity-60"
+              >
+                Download
+              </button>
+              <button
+                onClick={() => shareCard(index)}
+                disabled={isExporting}
+                className="flex-1 rounded-lg bg-hh-yellow px-4 py-2.5 text-sm font-bold uppercase tracking-wide text-hh-green-950 transition hover:bg-hh-yellow-soft disabled:opacity-60"
+              >
+                Share to X
+              </button>
+            </div>
           </div>
         ))}
       </div>

@@ -78,13 +78,6 @@ const IDCard = forwardRef<HTMLDivElement, IDCardData>(function IDCard(
                 </div>
               )}
             </div>
-            <div className="absolute -bottom-2 -left-2 flex h-14 w-14 items-center justify-center rounded-full border-2 border-dashed border-hh-pink bg-hh-green-950 text-center text-[6px] font-bold leading-[1.1] text-hh-pink">
-              HACKER
-              <br />
-              HOUSE
-              <br />
-              GOA 2026
-            </div>
           </div>
 
           <div className="min-w-0 flex-1 pt-1">

@@ -12,9 +12,8 @@ export default function SoloGenerator() {
   const [techStack, setTechStack] = useState("");
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
   const [isPhotoLoading, setIsPhotoLoading] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   async function handlePhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -46,7 +45,7 @@ export default function SoloGenerator() {
 
   async function handleShare() {
     await handleDownload();
-    const text = `Just built my HH Goa 2026 ID card 🌴 #FrameInGoa\n\nMake yours:`;
+    const text = `Shipping from Hyderabad 🌴⚡\n\nI'm officially framed for HH Goa 2026.\n\nCheck out my Builder ID Card 👇\n#FrameInGoa`;
     const url = typeof window !== "undefined" ? window.location.origin : "https://hhgoa.com";
     const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
     window.open(intent, "_blank", "noopener,noreferrer");
