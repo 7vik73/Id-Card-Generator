@@ -45,7 +45,7 @@ export default function SoloGenerator() {
 
   async function handleShare() {
     await handleDownload();
-    const text = `Shipping from Hyderabad 🌴⚡\n\nI'm officially framed for HH Goa 2026.\n\nCheck out my Builder ID Card 👇\n#FrameInGoa`;
+    const text = `Shipping from Hyderabad 🌴⚡\n\nI'm officially framed for HH Goa 2026.\n\nCheck out my Builder ID Card 👇\n#FrameInGoa\n`;
     const url = typeof window !== "undefined" ? window.location.origin : "https://hhgoa.com";
     const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
     window.open(intent, "_blank", "noopener,noreferrer");
