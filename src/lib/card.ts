@@ -18,6 +18,54 @@ export function generateIdNumber(name: string): string {
   return `HH-26-${digits}`;
 }
 
+const BUILDER_CLASS_ADJECTIVES = [
+  "Midnight",
+  "Neon",
+  "Rogue",
+  "Sunset",
+  "Feral",
+  "Turbo",
+  "Barefoot",
+  "Static",
+  "Salty",
+  "Chaotic",
+  "Nocturnal",
+  "Wired",
+  "Analog",
+  "Glitchy",
+  "Sunburnt",
+];
+
+const BUILDER_CLASS_NOUNS = [
+  "Shipper",
+  "Debugger",
+  "Architect",
+  "Wizard",
+  "Nomad",
+  "Tinkerer",
+  "Hacker",
+  "Builder",
+  "Surfer",
+  "Committer",
+  "Prototyper",
+  "Deployer",
+  "Scripter",
+  "Explorer",
+  "Maverick",
+];
+
+/** Deterministic "Builder Class" flavor tag derived from a seed (e.g. name), stable across renders. */
+export function generateBuilderClass(seed: string): string {
+  const s = seed.trim() || "hacker";
+  let hash = 0;
+  for (let i = 0; i < s.length; i++) {
+    hash = (hash * 31 + s.charCodeAt(i)) >>> 0;
+  }
+  const adjective = BUILDER_CLASS_ADJECTIVES[hash % BUILDER_CLASS_ADJECTIVES.length];
+  const noun = BUILDER_CLASS_NOUNS[Math.floor(hash / BUILDER_CLASS_ADJECTIVES.length) % BUILDER_CLASS_NOUNS.length];
+  return `${adjective} ${noun}`;
+}
+
 export function formatTechStack(techStack: string): string {
   return techStack
     .split(",")

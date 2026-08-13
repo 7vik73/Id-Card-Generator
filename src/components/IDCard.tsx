@@ -1,22 +1,25 @@
 import { forwardRef } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { formatTechStack, generateIdNumber } from "@/lib/card";
+import { formatTechStack, generateBuilderClass, generateIdNumber } from "@/lib/card";
 
 export type IDCardData = {
   name: string;
   role: string;
   techStack: string;
   photoUrl: string | null;
+  /** Random seed reshuffled by the "Reroll" button; changes the generated Builder Class without touching the name. */
+  builderClassSeed?: string;
 };
 
 const IDCard = forwardRef<HTMLDivElement, IDCardData>(function IDCard(
-  { name, role, techStack, photoUrl },
+  { name, role, techStack, photoUrl, builderClassSeed },
   ref
 ) {
   const displayName = name.trim() || "YOUR NAME";
   const displayRole = role.trim() || "HACKER";
   const stackDisplay = formatTechStack(techStack) || "YOUR TECH STACK HERE";
   const idNumber = generateIdNumber(name.trim() || "hacker");
+  const builderClass = generateBuilderClass(`${name.trim() || "hacker"}::${builderClassSeed ?? ""}`);
 
   return (
     <div
@@ -90,6 +93,9 @@ const IDCard = forwardRef<HTMLDivElement, IDCardData>(function IDCard(
             </div>
             <div className="mt-1 inline-block rounded bg-hh-yellow px-2 py-0.5 text-[10px] font-bold uppercase text-hh-green-950">
               {displayRole}
+            </div>
+            <div className="mt-1 text-[8px] font-bold uppercase tracking-widest text-hh-pink">
+              ⚡ CLASS: {builderClass}
             </div>
             <div className="mt-2 rounded border border-hh-cream/70 bg-hh-cream px-2 py-1 text-hh-green-950">
               <div className="text-[8px] font-bold tracking-widest">TECH STACK:</div>

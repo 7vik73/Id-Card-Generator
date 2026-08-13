@@ -11,9 +11,14 @@ export default function SoloGenerator() {
   const [role, setRole] = useState("");
   const [techStack, setTechStack] = useState("");
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [builderClassSeed, setBuilderClassSeed] = useState("");
   const [isExporting, setIsExporting] = useState(false);
   const [isPhotoLoading, setIsPhotoLoading] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  function rerollBuilderClass() {
+    setBuilderClassSeed(Math.random().toString(36).slice(2));
+  }
 
   async function handlePhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -111,6 +116,14 @@ export default function SoloGenerator() {
           />
         </label>
 
+        <button
+          type="button"
+          onClick={rerollBuilderClass}
+          className="flex items-center justify-center gap-2 rounded-lg border border-dashed border-hh-pink/60 px-3 py-2 text-xs font-bold uppercase tracking-wide text-hh-pink transition hover:bg-hh-pink/10"
+        >
+          🔀 Reroll Builder Class
+        </button>
+
         <div className="mt-2 flex flex-col gap-3 sm:flex-row">
           <button
             onClick={handleDownload}
@@ -135,7 +148,14 @@ export default function SoloGenerator() {
 
       <section className="flex w-full justify-center lg:sticky lg:top-12 lg:w-auto">
         <TiltCard>
-          <IDCard ref={cardRef} name={name} role={role} techStack={techStack} photoUrl={photoUrl} />
+          <IDCard
+            ref={cardRef}
+            name={name}
+            role={role}
+            techStack={techStack}
+            photoUrl={photoUrl}
+            builderClassSeed={builderClassSeed}
+          />
         </TiltCard>
       </section>
     </main>
